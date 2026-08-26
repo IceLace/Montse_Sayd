@@ -1,0 +1,16 @@
+/*
+ * Minimal global reset for the wedding invitation app.
+ * All layout, color and typography are owned by invitation.css
+ * and invitation-page.css — do not add competing rules here.
+ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}

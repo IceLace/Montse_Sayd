@@ -1,0 +1,187 @@
+/* ─── Reset & root ────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  background-color: #2b1d17;
+}
+
+/* ─── Stage ───────────────────────────────────────────────────────── */
+.stage {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #2b1d17;
+}
+
+/* ─── Envelope container ──────────────────────────────────────────── */
+/*
+ * Assets are 936 × 1680. Constrain by width (100vw) so the envelope
+ * never overflows horizontally on narrow mobile screens.
+ * Height follows the aspect ratio — always fits within 100dvh on portrait mobile.
+ */
+.envelope-container {
+  position: relative;
+  width: 100vw;
+  height: calc(100vw * (1680 / 936));
+  /* Never taller than the viewport (landscape / large desktop) */
+  max-height: 100dvh;
+  max-width: calc(100dvh * (936 / 1680));
+  flex-shrink: 0;
+}
+
+/* ─── Paper sheet ─────────────────────────────────────────────────── */
+/*
+ * Mirror the envelope-container sizing exactly:
+ * height = 100dvh, width follows the paper's own aspect ratio (848:1264).
+ * This makes the paper occupy the same footprint as the envelope.
+ */
+.paper-sheet-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.paper-sheet {
+  /* Same width-driven logic as the envelope container */
+  width: 100vw;
+  height: calc(100vw * (1264 / 848));
+  max-height: 100dvh;
+  max-width: calc(100dvh * (848 / 1264));
+  /* transform set by GSAP on mount (scale: 0.985 → 1 on open) */
+  transform-origin: center center;
+  will-change: transform;
+  filter: drop-shadow(0 10px 40px rgba(0, 0, 0, 0.6));
+}
+
+.paper-sheet img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  -webkit-user-drag: none;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* ─── Envelope layer (click target) ──────────────────────────────── */
+.envelope-layer {
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  line-height: 1;
+
+  /* Fills the stage; the envelope-container is centered inside it */
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* No overflow:hidden here — the invitation page must show through
+     as the envelope halves slide apart */
+}
+
+/* ─── Envelope pieces ─────────────────────────────────────────────── */
+/*
+ * Both pieces are stacked at inset:0 inside .envelope-container.
+ * The LEFT piece must be on top (z-index higher) because its right half
+ * is transparent — the right piece shows through beneath it.
+ * If the right piece were on top it would fully obscure the left.
+ *
+ * GSAP animates xPercent: left → -120, right → +120.
+ */
+.envelope-piece {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+
+.envelope-piece--left {
+  z-index: 1;
+}
+
+.envelope-piece--right {
+  z-index: 2; /* on top — seal sits at the center seam over the left piece */
+}
+
+.envelope-piece img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /*
+   * object-fit: contain so the PNG is never stretched or cropped.
+   * The transparent regions in each asset show through to whatever is below.
+   * object-position: center keeps the envelope centred within its container.
+   */
+  object-fit: contain;
+  object-position: center center;
+  -webkit-user-drag: none;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* ─── Open-envelope CTA indicator ────────────────────────────────── */
+.open-envelope-cta {
+  position: absolute;
+  left: 50%;
+  bottom: 12.5%;
+  width: min(55%, 350px);
+  height: auto;
+  transform: translateX(-50%) scale(1);
+  transform-origin: 50% 55%;
+  opacity: 1;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  will-change: transform, opacity, filter;
+  z-index: 3; /* above both envelope pieces */
+}
+
+.envelope-container.is-opening .open-envelope-cta {
+  animation: dismiss-open-cta 420ms cubic-bezier(.4, 0, .7, .2) forwards;
+}
+
+@keyframes dismiss-open-cta {
+  to {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px) scale(.72);
+    filter: blur(1.5px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .envelope-container.is-opening .open-envelope-cta {
+    animation-duration: 120ms;
+  }
+  @keyframes dismiss-open-cta {
+    to {
+      opacity: 0;
+      transform: translateX(-50%) translateY(10px) scale(.72);
+      filter: none;
+    }
+  }
+}
