@@ -169,6 +169,67 @@ body {
   }
 }
 
+/* ─── Swipe-up hint ──────────────────────────────────────────────────────── */
+
+/*
+ * Lives inside .invitation-page (position:relative, overflow:visible).
+ * pointer-events:none so it never blocks touch/scroll — dismissal is handled
+ * by the onPointerDown handler in React before the gesture reaches WeddingIntro.
+ */
+.swipe-hint {
+  position: absolute;
+  bottom: calc(2% + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  z-index: 10;
+  opacity: 0;
+}
+
+.swipe-hint__flourish {
+  width: clamp(28px, 4cqw, 36px);
+  height: auto;
+  display: block;
+}
+
+.swipe-hint__label {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(0.6rem, 2.6cqw, 0.78rem);
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  color: #7a5538;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.swipe-hint--visible {
+  animation:
+    swipe-hint-fadein 700ms ease-out forwards,
+    swipe-hint-float  2s   cubic-bezier(.45, 0, .55, 1) 700ms infinite;
+  opacity: 0;
+}
+
+@keyframes swipe-hint-fadein {
+  from { opacity: 0; }
+  to   { opacity: 0.76; }
+}
+
+@keyframes swipe-hint-float {
+  0%   { transform: translateX(-50%) translateY(0);    }
+  50%  { transform: translateX(-50%) translateY(-6px); }
+  100% { transform: translateX(-50%) translateY(0);    }
+}
+
+.swipe-hint--reduced.swipe-hint--visible {
+  animation: swipe-hint-fadein 700ms ease-out forwards;
+}
+
 /* ─── Physical page stack ────────────────────────────────────────────────── */
 
 /*
@@ -336,32 +397,32 @@ body {
 
 .announcement-copy {
   position: absolute;
+  z-index: 2;
   margin: 0;
   font-family: "Cormorant Garamond", "Baskerville", "Times New Roman", serif;
   font-size: clamp(14px, 4.17cqw, 20px);
   font-weight: 400;
   line-height: 1.49;
-  text-align: center;
 }
 
 .announcement-copy--top {
-  top: 16.95%;
-  left: 10.2%;
-  width: 53.5%;
+  top: 8%;
+  left: 5%;
+  width: 52%;
+  text-align: center;
 }
 
 .announcement-copy--bottom {
-  top: 62.5%;
-  left: 40%;
-  width: 54%;
+  top: 68%;
+  right: 5%;
+  width: 52%;
+  text-align: center;
 }
 
 .reveal-line {
   display: block;
   white-space: nowrap;
-  width: max-content;
-  max-width: 100%;
-  margin-inline: auto;
+  width: 100%;
   opacity: 0;
   clip-path: inset(0 100% 0 0);
   transform: translateX(-0.35em);
@@ -373,12 +434,38 @@ body {
   animation-delay: calc(350ms + var(--line) * 230ms);
 }
 
+/* ── Couple photograph ── */
+.announcement-photo {
+  position: absolute;
+  top: 29%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 88%;
+  height: auto;
+  object-fit: contain;
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.announcement-page.is-revealed .announcement-photo {
+  animation: reveal-photo 1.4s ease-out 1.5s forwards;
+}
+
+@keyframes reveal-photo {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
 .announcement-divider {
   position: absolute;
-  top: 43.0%;
+  top: 62%;
   left: 15.8%;
   width: 68.4%;
   height: auto;
+  z-index: 2;
   opacity: 0;
   transform: scaleX(0.82);
   transform-origin: center;
@@ -408,7 +495,8 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .announcement-page.is-revealed .reveal-line,
-  .announcement-page.is-revealed .announcement-divider {
+  .announcement-page.is-revealed .announcement-divider,
+  .announcement-page.is-revealed .announcement-photo {
     animation: none;
     opacity: 1;
     clip-path: none;

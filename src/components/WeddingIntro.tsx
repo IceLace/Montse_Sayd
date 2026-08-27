@@ -24,7 +24,7 @@ const PRELOAD_ASSETS = [
   assetUrl('assets/shared/page-front.png'),
   assetUrl('assets/invitation/montse-sayd-romantic-calligraphy.png'),
   assetUrl('assets/invitation/couple-magic-drawing.gif'),
-  assetUrl('assets/invitation/wedding-rings-divider.png'),
+  assetUrl('assets/announcement/wedding-rings-divider.png'),
   assetUrl('assets/family/family-divider.png'),
   assetUrl('assets/family/vigil-candles.png'),
   assetUrl('assets/family/wedding-rings.png'),
@@ -104,7 +104,9 @@ export default function WeddingIntro() {
    * Slot 1's InvitationPage shows the paper texture always; only its
    * text/portrait content is hidden until the envelope fully departs.
    */
-  const paperRef = useRef<HTMLDivElement>(null)
+  const paperRef        = useRef<HTMLDivElement>(null)
+  /** Called by InvitationPage to expose its dismissHint fn to us */
+  const dismissHintRef  = useRef<(() => void) | null>(null)
 
   // ── Audio ─────────────────────────────────────────────────────────────────
   const audioRef = useRef<HTMLAudioElement | null>(null)
@@ -182,6 +184,8 @@ export default function WeddingIntro() {
     if (!gestureActiveRef.current) return
     const t = e.touches[0]
     touchStartRef.current = { x: t.clientX, y: t.clientY }
+    // Dismiss the swipe-up hint on the first touch gesture
+    dismissHintRef.current?.()
   }, [])
 
   const handleTouchEnd = useCallback((e: React.TouchEvent) => {
@@ -316,7 +320,11 @@ export default function WeddingIntro() {
         {/* Slot 1: InvitationPage — paperRef here for GSAP envelope-open scale */}
         {(() => { const p = slotProps(1); return (
           <div ref={paperRef} className={p.className} style={p.style}>
-            <InvitationPage contentVisible={invitationContentVisible} />
+            <InvitationPage
+              contentVisible={invitationContentVisible}
+              isActive={currentPage === 1}
+              dismissHintRef={dismissHintRef}
+            />
           </div>
         )})()}
 

@@ -39,7 +39,14 @@ export default function AnnouncementPage({ active }: AnnouncementPageProps) {
         <span className="reveal-line" style={{ '--line': 4 } as React.CSSProperties}>matrimonio.</span>
       </p>
 
-      <img className="announcement-divider" src={assetUrl('assets/invitation/wedding-rings-divider.png')} alt="" aria-hidden="true" draggable={false} />
+      <img
+        className="announcement-photo"
+        src={assetUrl('assets/announcement/montse-sayd-page2-photo.webp')}
+        alt="Montse y Sayd"
+        draggable={false}
+      />
+
+      <img className="announcement-divider" src={assetUrl('assets/announcement/wedding-rings-divider.png')} alt="" aria-hidden="true" draggable={false} />
 
       <p className="announcement-copy announcement-copy--bottom">
         <span className="reveal-line" style={{ '--line': 5 } as React.CSSProperties}>Este día especial es el</span>
