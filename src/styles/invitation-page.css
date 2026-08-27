@@ -1088,26 +1088,25 @@ body {
 .gifts-page h2, .gifts-page p { margin:0; font-weight:400; }
 .gifts-sprig { position:absolute; top:8.8%; left:44.6%; width:10.7%; opacity:0; }
 .gifts-heading { position:absolute; top:14.5%; left:30%; width:40%; text-align:center; font:400 4.49cqw/1.2 "Cormorant Garamond",Baskerville,serif; opacity:0; }
-.gift-stage { position:absolute; top:18.1%; left:41.7%; width:23.5%; aspect-ratio:1; }
+.gift-stage { position:absolute; top:18.1%; left:38.25%; width:23.5%; aspect-ratio:1; }
 .gift-stage img { position:absolute; inset:0; width:100%; height:100%; }
 .gift-box { opacity:0; clip-path:inset(100% 0 0); }
 .gift-ribbon { opacity:0; clip-path:inset(0 50%); }
-.gifts-primary { position:absolute; top:33.8%; left:27%; width:54%; text-align:center; font:400 3.95cqw/1.36 "Cormorant Garamond",Baskerville,serif; opacity:0; }
-.gifts-divider { position:absolute; top:41.5%; left:46.5%; width:14%; height:10px; opacity:0; }
+.gifts-primary { position:absolute; top:33.8%; left:23%; width:54%; text-align:center; font:400 3.95cqw/1.36 "Cormorant Garamond",Baskerville,serif; opacity:0; }
+.gifts-divider { position:absolute; top:41.5%; left:43%; width:14%; height:10px; opacity:0; }
 .gifts-divider::before,.gifts-divider::after { content:""; position:absolute; top:4px; width:45%; height:1px; background:rgb(190 143 69); }
 .gifts-divider::before { left:0; }
 .gifts-divider::after { right:0; }
 .gifts-divider i { position:absolute; left:calc(50% - 4px); top:0; width:8px; height:8px; border-radius:50%; background:rgb(190 143 69); }
-.gifts-copy { position:absolute; top:44.2%; left:28%; width:62%; text-align:center; font:400 3.31cqw/1.48 "Cormorant Garamond",Baskerville,serif; opacity:0; }
+.gifts-copy { position:absolute; top:44.2%; left:19%; width:62%; text-align:center; font:400 3.31cqw/1.48 "Cormorant Garamond",Baskerville,serif; opacity:0; }
 
 /* ── Registry section container ─────────────────────────────────────── */
-/* Left edge at 37 %, right edge at 83 % → width 46 % of page.          */
-/* This keeps both cards clear of the left-side floral illustration.     */
+/* Aligned right of floral illustration, same as mobile: left 33 % → right 87 %. */
 .registry-section {
   position: absolute;
-  top: 53%;
-  left: 37%;
-  width: 46%;
+  top: 54.5%;
+  left: 33%;
+  width: 54%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1117,9 +1116,13 @@ body {
 
 .registry-section__label {
   margin: 0;
-  font: 600 2.6cqw/1 "Cormorant Garamond", Baskerville, serif;
-  letter-spacing: .12em;
-  color: rgb(116 88 66);
+  padding-top: 2.5cqw;
+  border-top: 1px solid rgb(190 143 69 / .45);
+  width: 100%;
+  text-align: center;
+  font: 700 3.2cqw/1 "Cormorant Garamond", Baskerville, serif;
+  letter-spacing: .14em;
+  color: rgb(158 110 42);
   opacity: 0;
 }
 
@@ -1174,7 +1177,7 @@ body {
 .gifts-page .registry-alcancia {
   margin: .6cqw 0 0;
   text-align: center;
-  font: italic 2.85cqw/1.52 "Cormorant Garamond", Baskerville, serif;
+  font: italic 3.5cqw/1.52 "Cormorant Garamond", Baskerville, serif;
   color: rgb(116 88 66);
   opacity: 0;
 }
@@ -1182,7 +1185,7 @@ body {
 .registry-alcancia__line { display: inline; }
 
 /* Footer ribbon moved up slightly to give alcancía breathing room       */
-.gift-footer { position:absolute; top:79%; left:36.5%; width:50%; aspect-ratio:520/230; }
+.gift-footer { position:absolute; top:84%; left:36.5%; width:50%; aspect-ratio:520/230; }
 .gift-footer__ribbon { position:absolute; top:0; left:0; width:100%; opacity:0; clip-path:inset(0 100% 0 0); }
 .gift-footer__tag { position:absolute; top:36%; left:48%; width:24%; opacity:0; transform-origin:12% 3%; }
 
@@ -1215,7 +1218,7 @@ body {
    GIFT-BOX SPARKLES  —  3 stars, fire once when the bow appears, no repeat
    ═══════════════════════════════════════════════════════════════════════════
    Coordinates are % of .gifts-page.
-   Gift box:  left 41.7 % → right 65.2 %,  top 18.1 % → bottom ~29.5 %
+   Gift box:  left 38.25 % → right 61.75 %,  top 18.1 % → bottom ~29.5 %
    Bow sits at roughly the top 35 % of the stage, centred horizontally.   */
 
 .gift-star {
@@ -1234,11 +1237,11 @@ body {
 .gifts-page.is-revealed .gift-star { animation-play-state: running; }
 
 /* Above the bow, centred */
-.gift-star--a { top: 13%;   left: 50%;   width: 5.5cqw; height: 5.5cqw; animation-delay: 1.5s;  --sr:  8deg; }
+.gift-star--a { top: 13%;   left: 46.55%;   width: 5.5cqw; height: 5.5cqw; animation-delay: 1.5s;  --sr:  8deg; }
 /* Upper-left corner of the box */
-.gift-star--b { top: 15.5%; left: 39%;   width: 4cqw;   height: 4cqw;   animation-delay: 1.85s; --sr: -20deg; }
+.gift-star--b { top: 15.5%; left: 35.55%;   width: 4cqw;   height: 4cqw;   animation-delay: 1.85s; --sr: -20deg; }
 /* Upper-right corner of the box */
-.gift-star--c { top: 15%;   left: 64%;   width: 4.5cqw; height: 4.5cqw; animation-delay: 2.1s;  --sr:  18deg; }
+.gift-star--c { top: 15%;   left: 60.55%;   width: 4.5cqw; height: 4.5cqw; animation-delay: 2.1s;  --sr:  18deg; }
 
 @keyframes box-sparkle {
   0%   { opacity: 0; transform: rotate(var(--sr, 0deg)) scale(0);    filter: none; }
@@ -1349,7 +1352,7 @@ body {
   /* ── Registry section: wider column, shifted right of the bouquet ─────
      top bumped from 53 % → 55.1 % to open 12–14 px after .gifts-copy   */
   .registry-section {
-    top: 55.1%;
+    top: 54%;  /* mobile: unchanged */
     left: 33%;
     width: 54%;
     gap: 1.3cqw;          /* card-to-card gap; label gets its own margin  */
@@ -1358,12 +1361,13 @@ body {
   /* ── Section label ─────────────────────────────────────────────────────
      margin-bottom: 1.7cqw + gap 1.3cqw ≈ 10–12 px above Amazon card    */
   .registry-section__label {
-    font-size: 2.15cqw;
-    letter-spacing: .05em;
+    font-size: 2.7cqw;
+    letter-spacing: .10em;
     white-space: nowrap;
     width: 100%;
     text-align: center;
     margin-bottom: 1.7cqw;
+    padding-top: 1.2cqw;
   }
 
   /* ── Cards: same padding on both, icon and texts vertically centred ── */
@@ -1397,7 +1401,7 @@ body {
      6.5cqw ≈ 22 px; combined with flex gap 1.3cqw ≈ 26 px total.      */
   .gifts-page .registry-alcancia {
     margin-top: 6.5cqw;
-    font-size: 2.65cqw;
+    font-size: 3.2cqw;
   }
 
   .registry-alcancia__line {
@@ -1419,7 +1423,7 @@ body {
      Moves the group (cinta + moño + etiqueta M&S) ~16 px up,
      bringing the visible ribbon curve to ~20–24 px below the note.     */
   .gift-footer {
-    top: 77.8%;
+    top: 80.5%;
   }
 }
 
