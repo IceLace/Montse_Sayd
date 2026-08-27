@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# GitHub Pages — let GitHub manage this file
+docs/CNAME
