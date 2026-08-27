@@ -323,7 +323,8 @@ body {
 .page-slot--6,
 .page-slot--7,
 .page-slot--8,
-.page-slot--9 {
+.page-slot--9,
+.page-slot--10 {
   transition: transform 900ms cubic-bezier(0.16, 1, 0.3, 1),
               filter    400ms ease,
               opacity   700ms ease;
@@ -342,7 +343,8 @@ body {
 .page-slot--6.is-above,
 .page-slot--7.is-above,
 .page-slot--8.is-above,
-.page-slot--9.is-above {
+.page-slot--9.is-above,
+.page-slot--10.is-above {
   pointer-events: none;
   transition: transform 900ms cubic-bezier(0.16, 1, 0.3, 1),
               filter    400ms ease,
@@ -359,7 +361,8 @@ body {
 .page-slot--6.is-below,
 .page-slot--7.is-below,
 .page-slot--8.is-below,
-.page-slot--9.is-below {
+.page-slot--9.is-below,
+.page-slot--10.is-below {
   pointer-events: none;
 }
 
@@ -1714,12 +1717,15 @@ body {
 /* ── Outer content area ──────────────────────────────────────────── */
 .dress-code-content {
   position: absolute;
-  inset: 6% 7% 4.5%;
+  /* push top down slightly so content sits more centered in the page */
+  inset: 9% 7% 18%;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   font-family: Georgia, "Times New Roman", serif;
+  /* justify vertically so elements spread naturally */
+  justify-content: space-between;
 }
 
 /* ── Header block ────────────────────────────────────────────────── */
@@ -1734,11 +1740,11 @@ body {
 .dc-botanical-pin {
   width: clamp(20px, 3.5cqw, 32px);
   height: auto;
-  margin-bottom: 2%;
+  margin-bottom: 0;
 }
 
 .dress-code-page h1 {
-  margin: 0 auto;
+  margin: 2% auto 0;
   width: 68%;
   max-width: 520px;
   font-size: clamp(21px, 5.5vw, 32px);
@@ -1754,14 +1760,14 @@ body {
 
 /* "CÓDIGO DE VESTIMENTA" subtitle */
 .dress-code-page .dc-subtitle {
-  margin: 1.2% 0 0;
+  margin: 2% 0 0;
   font-size: clamp(13px, 2.4cqw, 20px);
   font-weight: 600;
   letter-spacing: .06em;
 }
 
 .dress-code-page .formal-label {
-  margin: 1.6% 0 2%;
+  margin: 2% 0 2.5%;
   color: var(--dc-gold);
   font-size: clamp(15px, 2.6cqw, 22px);
   font-style: italic;
@@ -1773,7 +1779,7 @@ body {
   position: relative;
   width: 50%;
   height: 12px;
-  margin-bottom: 1.8%;
+  margin-bottom: 0;
   flex-shrink: 0;
 }
 
@@ -1800,7 +1806,6 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 5%;
-  /* grid items align at the bottom of the image frame row */
   align-items: end;
   flex-shrink: 0;
 }
@@ -1815,7 +1820,7 @@ body {
 /* Fixed-height frame — both images share the same visual baseline */
 .attire-image-frame {
   position: relative;
-  height: clamp(160px, 22vh, 260px);
+  height: clamp(185px, 26vh, 305px);
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -1863,8 +1868,22 @@ body {
 }
 
 /* ── Color notice ────────────────────────────────────────────────── */
+/* Note: .color-notice is defined below; this block is intentionally empty */
+
+/* ── Closing heart ───────────────────────────────────────────────── */
+.dc-closing {
+  display: flex;
+  justify-content: center;
+}
+
+.dc-heart-ornament {
+  width: clamp(28px, 5cqw, 44px);
+  height: auto;
+  opacity: 0.75;
+}
+
+/* ── Color notice ────────────────────────────────────────────────── */
 .color-notice {
-  margin-top: 1.8%;
   font-style: italic;
   font-weight: 400;
 }
@@ -1915,104 +1934,6 @@ body {
   letter-spacing: .05em;
 }
 
-/* ── Countdown section — offset right to clear the bouquet ──────── */
-/*
- * The paper's lower-left bouquet occupies roughly the left 28% of the sheet.
- * We push the countdown block to the right side to avoid overlap.
- * On the flex column, margin-left: auto + margin-right: 6% shifts it right;
- * width is capped so it never overflows.
- */
-.countdown-section {
-  width: min(64%, 520px);
-  margin-left: auto;
-  margin-right: 5%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  margin-top: 1.5%;
-}
-
-.countdown-divider {
-  width: 75%;
-  margin: 0 0 1.4%;
-}
-
-.countdown-heading {
-  width: 100%;
-  text-align: center;
-}
-
-.countdown-heading p {
-  margin: 0;
-  font-size: clamp(10px, 1.9cqw, 16px);
-  letter-spacing: .06em;
-}
-
-/* "NUESTRO GRAN DÍA" */
-.dress-code-page .dc-gran-dia {
-  margin-top: .8%;
-  font-size: clamp(15px, 2.7cqw, 23px);
-  font-weight: 700;
-  letter-spacing: .02em;
-}
-
-.countdown {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr auto 1fr;
-  align-items: start;
-  width: 90%;
-  margin-top: 2%;
-}
-
-.countdown-unit { min-width: 0; }
-
-.countdown-value {
-  position: relative;
-  display: block;
-  overflow: hidden;
-  color: var(--dc-terracotta);
-  font-size: clamp(28px, 5cqw, 44px);
-  line-height: 1.1;
-  font-variant-numeric: tabular-nums;
-}
-
-.countdown-unit small {
-  display: block;
-  margin-top: 5px;
-  font-weight: 700;
-  font-size: clamp(8px, 1.45cqw, 12px);
-  letter-spacing: .06em;
-}
-
-.countdown-dot {
-  color: var(--dc-gold);
-  padding-top: .7em;
-  font-size: clamp(14px, 2.5cqw, 22px);
-}
-
-.event-date {
-  margin: 2.5% 0 0;
-  font-weight: 700;
-  font-size: clamp(11px, 1.9cqw, 16px);
-  letter-spacing: .02em;
-}
-
-.event-time {
-  margin: 1.2% 0 0;
-  color: var(--dc-sepia);
-  font-size: clamp(11px, 2.8vw, 16px);
-  letter-spacing: .02em;
-  text-align: center;
-}
-
-/* Clock ornament SVG */
-.dc-clock-ornament {
-  width: clamp(36px, 6.5cqw, 58px);
-  height: auto;
-  margin-top: 2%;
-}
-
 /* ── Entry animations ─────────────────────────────────────────────── */
 /* All direct children of .dress-code-content start invisible */
 .dress-code-page:not(.is-active) .dress-code-content > * {
@@ -2038,9 +1959,9 @@ body {
   animation: dcReveal .7s .95s both;
 }
 
-/* Full countdown section */
-.dress-code-page.is-active .countdown-section {
-  animation: dcReveal .75s 1.2s both;
+/* Closing heart */
+.dress-code-page.is-active .dc-closing {
+  animation: dcReveal .6s 1.2s both;
 }
 
 @keyframes dcReveal {
@@ -2055,22 +1976,18 @@ body {
 
 /* ── Responsive: 430 px wide / short screens ─────────────────────── */
 @media (max-width: 430px), (max-height: 760px) {
-  .dress-code-content   { inset: 5.5% 6.5% 4%; }
+  .dress-code-content   { inset: 8% 6.5% 16%; }
   .attire-grid          { width: 76%; gap: 4%; }
-  .attire-image-frame   { height: clamp(130px, 20vh, 210px); }
-  .color-notice         { margin-top: 1.2%; }
-  .countdown-section    { width: min(68%, 520px); margin-right: 4%; margin-top: 1%; }
-  .countdown            { width: 92%; }
+  .attire-image-frame   { height: clamp(150px, 23vh, 250px); }
 }
 
 /* ── Narrow / extra-short (360 × 740) ────────────────────────────── */
 @media (max-width: 380px) {
-  .dress-code-content   { inset: 5% 6% 3.5%; }
-  .dc-botanical-pin     { width: clamp(16px, 3cqw, 24px); margin-bottom: 1.5%; }
+  .dress-code-content   { inset: 7% 6% 14%; }
+  .dc-botanical-pin     { width: clamp(16px, 3cqw, 24px); }
   .dress-code-page h1   { font-size: clamp(16px, 3.3cqw, 26px); }
   .attire-grid          { width: 80%; }
-  .attire-image-frame   { height: clamp(115px, 18vh, 185px); }
-  .countdown-section    { width: min(70%, 520px); }
+  .attire-image-frame   { height: clamp(130px, 21vh, 215px); }
 }
 
 /* ── Wide/desktop: page grows by aspect ratio; cap at comfortable size */
@@ -2080,14 +1997,406 @@ body {
 
 /* ── Reduced motion ──────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-  .dress-code-page *,
-  .countdown-value {
+  .dress-code-page * {
     animation: none !important;
     transition: none !important;
   }
   .dress-code-page .dress-code-content > * {
     opacity: 1 !important;
   }
+}
+
+/* ─── Itinerary page ──────────────────────────────────────────────────────── */
+
+/* ══ Page shell ══ */
+.itin-page {
+  position: relative;
+  width: min(90vw, calc((100dvh - 2rem) * 936 / 1680));
+  aspect-ratio: 936 / 1680;
+  overflow: hidden;
+  container-type: inline-size;
+  isolation: isolate;
+  --itin-gold:  #be8f45;
+  --itin-rust:  #995434;
+  --itin-sepia: #8f7054;
+  --itin-ink:   #70533f;
+  color: var(--itin-ink);
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+@media (max-aspect-ratio: 9 / 16) {
+  .itin-page { width: min(92vw, calc((100dvh - 1.5rem) * 936 / 1680)); }
+}
+
+.itin-paper {
+  position: absolute;
+  inset: 0; z-index: -1;
+  width: 100%; height: 100%;
+  object-fit: contain;
+}
+
+/*
+ * ══ Layout strategy ══
+ *
+ * All children are absolutely positioned against the PAGE (itin-page),
+ * which has aspect-ratio 936/1680. Vertical positions are expressed as
+ * percentages of the page height, giving pixel-perfect control that is
+ * identical on every screen size.
+ *
+ * Target distribution (% of page height):
+ *   Header        : top 5.5%,  height ~4%
+ *   Photo         : top 10%,   height ~25%  (auto from aspect ratio)
+ *   Timeline      : top 37%,   bottom 32%   → spans 31% of page
+ *   Countdown     : top 71%,   height ~10%
+ *   Heart         : top 82%
+ */
+
+/* itin-content is now only a positioning context; flex is not used */
+.itin-content {
+  position: absolute;
+  inset: 0;
+  /* no overflow clip — children are positioned individually */
+}
+
+/* ══ Header — centred, top of usable area ══ */
+.itin-header {
+  position: absolute;
+  top: 5%;
+  left: 7%; right: 7%;
+  text-align: center;
+  opacity: 0;
+}
+
+/* Header ornament — same pattern as .location-ornament */
+.itin-header-ornament {
+  width: clamp(20px, 5cqw, 40px);
+  height: auto;
+  display: block;
+  margin: 0 auto 0.5%;
+}
+
+.itin-title {
+  margin: 0;
+  font-size: clamp(13px, 4.8cqw, 30px);
+  font-weight: 400;
+  letter-spacing: .06em;
+  line-height: 1;
+}
+
+.itin-subtitle {
+  margin: 0.5% 0 0;
+  /* min raised to 10px so it stays readable on small phones */
+  font-size: clamp(10px, 2.2cqw, 16px);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--itin-sepia);
+  letter-spacing: .01em;
+}
+
+/* ══ Photo — starts at 15%, well below the full header block ══ */
+.itin-photo-wrap {
+  position: absolute;
+  top: 15%;
+  left: 5%; right: 5%;
+  opacity: 0;
+}
+
+.itin-photo {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ══ Timeline — starts at 43%, ends at ~74% ══ */
+.itin-timeline {
+  position: absolute;
+  top: 43%;
+  bottom: 26%;          /* → timeline ends at ~74% of page height */
+  left: 8%; right: 8%;  /* ~84% of page width, centred */
+}
+
+/* Spine — thin vertical gold line running through all dots */
+.itin-spine {
+  position: absolute;
+  left: 50%;
+  top: 0; bottom: 0;
+  transform: translateX(-50%);
+  width: 1px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.itin-spine-line {
+  position: absolute;
+  inset: 0;
+  background: #B8873B;
+  transform-origin: top center;
+  transform: scaleY(0);
+}
+
+/*
+ * Events use absolute positioning within .itin-timeline.
+ * We distribute 7 events evenly across the timeline height using
+ * CSS custom property --itin-pos (set to 0–6 via data-index).
+ * Each step = 100% / 6 ≈ 16.67%.
+ *
+ * Each row: 3-column grid  [left-cell] [dot 12px] [right-cell]
+ */
+.itin-event {
+  position: absolute;
+  left: 0; right: 0;
+  /* vertical centre of this event = top + (index/6 × 100%) */
+  top: calc(var(--itin-pos, 0) * 16.666%);
+  transform: translateY(-50%);
+  display: grid;
+  grid-template-columns: 1fr 12px 1fr;
+  align-items: center;
+  opacity: 0;
+}
+
+/* ── Cells ── */
+.itin-cell {
+  display: flex;
+  align-items: center;
+  gap: clamp(4px, 1cqw, 9px);
+}
+
+/* Left cell: icon then text, right-aligned toward dot */
+.itin-cell--left {
+  grid-column: 1;
+  justify-content: flex-end;
+}
+
+/* Right cell: text then icon, left-aligned toward dot */
+.itin-cell--right {
+  grid-column: 3;
+  justify-content: flex-start;
+}
+
+/* Text block: time + label stacked */
+.itin-event-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15%;
+}
+
+.itin-cell--left  .itin-event-text { text-align: left; }
+.itin-cell--right .itin-event-text { text-align: right; }
+
+/* Dot — centre column, small gold circle */
+.itin-dot {
+  grid-column: 2;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #B8873B;
+  justify-self: center;
+  flex-shrink: 0;
+  opacity: 0;
+  transform: scale(0);
+}
+
+/* Icon — hand-drawn PNG */
+.itin-event-icon {
+  width: clamp(24px, 4.8cqw, 40px);
+  height: auto;
+  flex-shrink: 0;
+  display: block;
+}
+
+/* Time label */
+.itin-event-time {
+  display: block;
+  font-size: clamp(9px, 2cqw, 16px);
+  font-weight: 600;
+  color: var(--itin-gold);
+  letter-spacing: .02em;
+  line-height: 1.2;
+}
+
+/* Event name */
+.itin-event-label {
+  display: block;
+  font-size: clamp(9px, 2cqw, 16px);
+  font-weight: 400;
+  letter-spacing: .06em;
+  color: var(--itin-rust);
+  line-height: 1.2;
+}
+
+/* ══ Countdown — matches location-page address/maps block horizontal position ══
+ * .location-lower uses justify-content:flex-end + padding-right:5cqw inside
+ * an 80cqw centred container, which pushes the 55cqw address block to the
+ * right. We replicate that: width 55% of page, flush to right with ~5% margin.
+ */
+.itin-countdown-wrap {
+  position: absolute;
+  top: 79%;
+  width: 55%;
+  right: 5%;
+  left: auto;
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* FALTAN: thin lines + word */
+.itin-faltan-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1%;
+}
+
+.itin-faltan-line {
+  flex: 1;
+  height: 1px;
+  background: color-mix(in srgb, var(--itin-gold) 50%, transparent);
+}
+
+.itin-faltan-text {
+  flex-shrink: 0;
+  padding: 0 0.6em;
+  font-size: clamp(8px, 1.6cqw, 13px);
+  font-weight: 700;
+  letter-spacing: .12em;
+  color: var(--itin-sepia);
+}
+
+/* Numbers row */
+.itin-countdown {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+}
+
+.itin-cunit {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Thin vertical bar between units */
+.itin-csep {
+  width: 1px;
+  align-self: stretch;
+  background: color-mix(in srgb, var(--itin-gold) 45%, transparent);
+  flex-shrink: 0;
+  margin: 2px 0;
+}
+
+.itin-cvalue {
+  display: block;
+  font-size: clamp(18px, 4.2cqw, 34px);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--itin-rust);
+  font-weight: 400;
+}
+
+.itin-cunit small {
+  display: block;
+  margin-top: 2px;
+  font-size: clamp(6px, 1.2cqw, 10px);
+  font-weight: 700;
+  letter-spacing: .08em;
+  color: var(--itin-sepia);
+  text-transform: uppercase;
+}
+
+/* ══ Heart flourish — ~83% of page height ══ */
+.itin-heart-wrap {
+  position: absolute;
+  top: 87%;
+  left: 0; right: 0;
+  display: flex;
+  justify-content: center;
+  opacity: 0;
+}
+
+.itin-heart {
+  width: clamp(104px, 20cqw, 160px);
+  height: auto;
+  display: block;
+}
+
+/* ══════════════════════════════════════════════════════════
+   ANIMATIONS — fire when .itin-page gains .is-active
+   ══════════════════════════════════════════════════════════ */
+
+.itin-page.is-active .itin-header {
+  animation: itin-rise .6s .1s both;
+}
+
+.itin-page.is-active .itin-photo-wrap {
+  animation: itin-fade .85s .45s both;
+}
+
+.itin-page.is-active .itin-spine-line {
+  animation: itin-spine-draw 1.3s .8s cubic-bezier(.4,0,.2,1) both;
+}
+
+/* Rows stagger via --itin-delay set in JS */
+.itin-page.is-active .itin-event {
+  animation: itin-rise .45s var(--itin-delay, 1.4s) both;
+}
+
+.itin-page.is-active .itin-event--left .itin-cell--left {
+  animation: itin-slide-right .4s calc(var(--itin-delay, 1.4s) + .04s) both;
+}
+
+.itin-page.is-active .itin-event--right .itin-cell--right {
+  animation: itin-slide-left .4s calc(var(--itin-delay, 1.4s) + .04s) both;
+}
+
+.itin-page.is-active .itin-dot {
+  animation: itin-dot-pop .3s calc(var(--itin-delay, 1.4s) + .1s) both;
+}
+
+.itin-page.is-active .itin-countdown-wrap {
+  animation: itin-rise .6s 3.5s both;
+}
+
+.itin-page.is-active .itin-heart-wrap {
+  animation: itin-fade .45s 3.9s both;
+}
+
+/* ── Keyframes ── */
+@keyframes itin-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes itin-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes itin-spine-draw {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+@keyframes itin-slide-right {
+  from { opacity: 0; transform: translateX(12px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes itin-slide-left {
+  from { opacity: 0; transform: translateX(-12px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes itin-dot-pop {
+  from { opacity: 0; transform: scale(0); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .itin-page * { animation: none !important; transition: none !important; }
+  .itin-header, .itin-photo-wrap, .itin-event,
+  .itin-cell--left, .itin-cell--right,
+  .itin-countdown-wrap, .itin-heart-wrap { opacity: 1 !important; }
+  .itin-dot        { opacity: 1 !important; transform: scale(1) !important; }
+  .itin-spine-line { transform: scaleY(1) !important; }
 }
 
 /* ─── Closing / epilogue page ─────────────────────────────────────────────── */

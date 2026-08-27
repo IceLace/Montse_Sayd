@@ -8,6 +8,7 @@ import CeremonyPage from './CeremonyPage'
 import ReceptionPage from './ReceptionPage'
 import GiftsPage from './GiftsPage'
 import DressCodePage from './DressCodePage'
+import ItineraryPage from './ItineraryPage'
 import RsvpPage from './RsvpPage'
 import ClosingPage from './ClosingPage'
 
@@ -46,6 +47,7 @@ const PRELOAD_ASSETS = [
   assetUrl('assets/rsvp/confirmation-envelope.png'),
   assetUrl('assets/dresscode/formal-suit-transparent.png'),
   assetUrl('assets/dresscode/formal-dress-transparent.png'),
+  assetUrl('assets/itinerary/itinerary-photo.webp'),
 ]
 
 /**
@@ -57,11 +59,12 @@ const PRELOAD_ASSETS = [
  * 5 = ReceptionPage
  * 6 = GiftsPage
  * 7 = DressCodePage
- * 8 = RsvpPage
- * 9 = ClosingPage  (last page — no sheets underneath)
+ * 8 = ItineraryPage
+ * 9 = RsvpPage
+ * 10 = ClosingPage  (last page — no sheets underneath)
  */
 const FIRST_PAGE = 1
-const LAST_PAGE  = 9
+const LAST_PAGE  = 10
 
 /**
  * Physical stack offsets per depth level.
@@ -77,6 +80,7 @@ const STACK_OFFSETS: Array<{ x: number; y: number; rot: number }> = [
   { x:  1, y: 24, rot: -0.10 },
   { x: -1, y: 27, rot:  0.08 },
   { x:  0, y: 30, rot:  0.06 },
+  { x:  1, y: 33, rot:  0.05 },
 ]
 
 /**
@@ -92,6 +96,7 @@ const STACK_SHADOWS = [
   'drop-shadow(0 1px  4px rgba(0,0,0,0.06))',
   'drop-shadow(0 1px  3px rgba(0,0,0,0.04))',
   'drop-shadow(0 1px  2px rgba(0,0,0,0.03))',
+  'drop-shadow(0 1px  2px rgba(0,0,0,0.02))',
 ]
 
 /** Duration of the active-page departure animation (ms) — must match CSS transition. */
@@ -374,17 +379,24 @@ export default function WeddingIntro() {
           </div>
         )})()}
 
-        {/* Slot 8: RsvpPage */}
+        {/* Slot 8: ItineraryPage */}
         {(() => { const p = slotProps(8); return (
           <div className={p.className} style={p.style}>
-            <RsvpPage active={currentPage === 8} />
+            <ItineraryPage active={currentPage === 8} />
           </div>
         )})()}
 
-        {/* Slot 9: ClosingPage — last page, no sheets underneath */}
+        {/* Slot 9: RsvpPage */}
         {(() => { const p = slotProps(9); return (
           <div className={p.className} style={p.style}>
-            <ClosingPage active={currentPage === 9} />
+            <RsvpPage active={currentPage === 9} />
+          </div>
+        )})()}
+
+        {/* Slot 10: ClosingPage — last page, no sheets underneath */}
+        {(() => { const p = slotProps(10); return (
+          <div className={p.className} style={p.style}>
+            <ClosingPage active={currentPage === 10} />
           </div>
         )})()}
       </div>
