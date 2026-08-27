@@ -69,7 +69,7 @@ body {
 
 .invitation-page__headline {
   top: 21.7%;
-  font-size: clamp(0.68rem, 3.1cqw, 1.8rem);
+  font-size: clamp(0.9rem, 4.2cqw, 2.4rem);
   letter-spacing: 0.24em;
 }
 
@@ -2085,8 +2085,7 @@ body {
 
 .itin-subtitle {
   margin: 0.5% 0 0;
-  /* min raised to 10px so it stays readable on small phones */
-  font-size: clamp(10px, 2.2cqw, 16px);
+  font-size: clamp(12px, 2.8cqw, 20px);
   font-style: italic;
   font-weight: 400;
   color: var(--itin-sepia);
@@ -2107,22 +2106,22 @@ body {
   display: block;
 }
 
-/* ══ Timeline — starts at 43%, ends at ~74% ══ */
+/* ══ Timeline ══ */
 .itin-timeline {
   position: absolute;
-  top: 43%;
-  bottom: 26%;          /* → timeline ends at ~74% of page height */
-  left: 8%; right: 8%;  /* ~84% of page width, centred */
+  top: 44%;
+  bottom: 25%;
+  left: 8%; right: 8%;
 }
 
-/* Spine — thin vertical gold line running through all dots */
+/* Spine — starts at first dot centre, extends past last dot */
 .itin-spine {
   position: absolute;
   left: 50%;
-  top: 0; bottom: 0;
+  top: 12px; bottom: -18px;
   transform: translateX(-50%);
   width: 1px;
-  overflow: hidden;
+  overflow: visible;
   pointer-events: none;
 }
 
@@ -2197,7 +2196,7 @@ body {
 
 /* Icon — hand-drawn PNG */
 .itin-event-icon {
-  width: clamp(24px, 4.8cqw, 40px);
+  width: clamp(30px, 6.5cqw, 52px);
   height: auto;
   flex-shrink: 0;
   display: block;
@@ -2206,7 +2205,7 @@ body {
 /* Time label */
 .itin-event-time {
   display: block;
-  font-size: clamp(9px, 2cqw, 16px);
+  font-size: clamp(11px, 2.5cqw, 20px);
   font-weight: 600;
   color: var(--itin-gold);
   letter-spacing: .02em;
@@ -2216,7 +2215,7 @@ body {
 /* Event name */
 .itin-event-label {
   display: block;
-  font-size: clamp(9px, 2cqw, 16px);
+  font-size: clamp(11px, 2.5cqw, 20px);
   font-weight: 400;
   letter-spacing: .06em;
   color: var(--itin-rust);
@@ -2230,7 +2229,7 @@ body {
  */
 .itin-countdown-wrap {
   position: absolute;
-  top: 79%;
+  top: 82%;
   width: 55%;
   right: 5%;
   left: auto;
@@ -2257,7 +2256,7 @@ body {
 .itin-faltan-text {
   flex-shrink: 0;
   padding: 0 0.6em;
-  font-size: clamp(8px, 1.6cqw, 13px);
+  font-size: clamp(12px, 2.5cqw, 18px);
   font-weight: 700;
   letter-spacing: .12em;
   color: var(--itin-sepia);
@@ -2299,7 +2298,7 @@ body {
 .itin-cunit small {
   display: block;
   margin-top: 2px;
-  font-size: clamp(6px, 1.2cqw, 10px);
+  font-size: clamp(9px, 1.8cqw, 14px);
   font-weight: 700;
   letter-spacing: .08em;
   color: var(--itin-sepia);
@@ -2309,7 +2308,7 @@ body {
 /* ══ Heart flourish — ~83% of page height ══ */
 .itin-heart-wrap {
   position: absolute;
-  top: 87%;
+  top: 90%;
   left: 0; right: 0;
   display: flex;
   justify-content: center;
