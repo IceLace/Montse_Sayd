@@ -45,12 +45,12 @@ export default function FamilyPage({ active }: FamilyPageProps) {
       <div className="parents parents--bride">
         <h3>Novia</h3>
         <p>Teresa Pérez Orenday</p>
-        <p>Juan Carlos Camacho Lozano</p>
+        <p>J. Carlos Camacho Lozano</p>
       </div>
 
       <div className="parents parents--groom">
         <h3>Novio</h3>
-        <p>Adriana Laura Guevara Lozano</p>
+        <p>Adriana Guevara Lozano</p>
         <p>Ricardo Jasso Morales</p>
       </div>
 
