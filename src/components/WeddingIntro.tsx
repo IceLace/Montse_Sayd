@@ -12,7 +12,7 @@ import ItineraryPage from './ItineraryPage'
 import RsvpPage from './RsvpPage'
 import ClosingPage from './ClosingPage'
 
-const MUSIC_SRC = assetUrl('assets/music/ivory-and-gold.mp3')
+const MUSIC_SRC = assetUrl('assets/music/inspiracion-instrumental.mp3')
 const MUSIC_TARGET_VOLUME = 0.32
 const MUSIC_FADE_MS = 280
 
