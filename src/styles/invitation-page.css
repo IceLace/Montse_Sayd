@@ -2728,3 +2728,169 @@ body {
   .cp-signature { font-size: clamp(22px, 6.7cqw, 35px); }
   .cp-seal { width: clamp(56px, 16cqw, 90px); }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+ * Couple Finale (Phase 8) — GIF + sparkle overlay
+ *
+ * .cp-couple-mount   absolute container, initially hidden, injected by JS
+ * .cp-couple-inner   position:relative wrapper so overlay aligns to GIF
+ * .cp-couple-gif     the 600×873 magic GIF, mounted only when phase starts
+ * .cp-couple-overlay sparkle WebP loop, absolute inset over the GIF
+ *
+ * Layout constraints:
+ *  - 600 × 873 px native → aspect-ratio 600/873 ≈ 0.6873
+ *  - object-fit:contain preserves ratio with no cropping
+ *  - max-width/max-height keeps comfortable margins on all screens
+ *  - No shadows, filters, halos, or blend modes
+ * ══════════════════════════════════════════════════════════════════════════════ */
+
+/* Mount: anchored bottom-right, sized to ~40% of the page width */
+.cp-couple-mount {
+  position: absolute;
+  z-index: 4;              /* above cp-closing-block (z-index:3) */
+  right: 2%;
+  bottom: 2%;
+  /* do NOT use inset:0 — we want bottom-right placement */
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Inner wrapper: sized to the image, provides the stacking context for overlay */
+.cp-couple-inner {
+  position: relative;
+  /* ~38% of page width keeps the couple visible without overlapping the seal area */
+  width: min(38cqw, 200px);
+  aspect-ratio: 600 / 873;
+}
+
+@media (max-aspect-ratio: 9 / 16) {
+  .cp-couple-inner {
+    width: min(36cqw, 180px);
+  }
+}
+
+@media (max-height: 620px) {
+  .cp-couple-inner {
+    width: min(30cqw, 150px);
+  }
+}
+
+/* The main GIF — fills the wrapper exactly, no deformation */
+.cp-couple-gif {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center center;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Sparkle overlay — identical footprint to the GIF, loop via WebP */
+.cp-couple-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center center;
+  transform-origin: center center;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  opacity: 0;              /* JS fades this in after MAGIC_GIF_MS */
+}
+
+/* Reduced-motion: couple mount shows immediately, no overlay */
+@media (prefers-reduced-motion: reduce) {
+  .cp-couple-mount { opacity: 1 !important; }
+  .cp-couple-overlay { display: none !important; }
+}
+
+/* ─── Closing page — ambient sparkle stars ────────────────────────────────── */
+/*
+ * 12 stars scattered across the whole closing page.
+ * Same shape/gradient/animation as btn-star on the gifts page.
+ * They activate via .cp-stars-active (added by JS when the final GIF mounts).
+ * Each has a unique position, size, and animation-delay to stagger the glows.
+ * The cycle is 10 s; active glow window is the first 25 % (~2.5 s), silent rest.
+ */
+.cp-star {
+  position: absolute;
+  translate: -50% -50%;
+  clip-path: polygon(50% 0%, 55% 44%, 100% 50%, 55% 56%, 50% 100%, 45% 56%, 0% 50%, 45% 44%);
+  background: radial-gradient(circle at 50% 50%, #ffffff 8%, #ffe566 25%, rgb(225 168 30) 58%, rgb(185 130 15) 100%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;                /* above cp-couple-mount (z-index:4) */
+  animation-name: cp-star-glow;
+  animation-duration: 10s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-fill-mode: none;
+  animation-play-state: paused;
+}
+
+/* Stars run only while .cp-stars-active is set on the closing page */
+.closing-page.cp-stars-active .cp-star { animation-play-state: running; }
+
+/* ── Positions, sizes, and staggered delays ────────────────────────────────
+   Top-left cluster */
+.cp-star--1  { top:  6%;  left: 12%;  width: 5cqw;   height: 5cqw;   animation-delay:  0.3s; }
+.cp-star--2  { top: 10%;  left:  5%;  width: 3.5cqw; height: 3.5cqw; animation-delay:  2.8s; }
+.cp-star--3  { top:  3%;  left: 28%;  width: 4cqw;   height: 4cqw;   animation-delay:  5.2s; }
+/* Top-right cluster */
+.cp-star--4  { top:  5%;  left: 80%;  width: 4.5cqw; height: 4.5cqw; animation-delay:  1.4s; }
+.cp-star--5  { top: 11%;  left: 91%;  width: 3.2cqw; height: 3.2cqw; animation-delay:  7.6s; }
+/* Mid-left */
+.cp-star--6  { top: 42%;  left:  8%;  width: 4cqw;   height: 4cqw;   animation-delay:  3.9s; }
+/* Centre */
+.cp-star--7  { top: 35%;  left: 50%;  width: 5.5cqw; height: 5.5cqw; animation-delay:  0.9s; }
+.cp-star--8  { top: 55%;  left: 38%;  width: 3.8cqw; height: 3.8cqw; animation-delay:  6.3s; }
+/* Mid-right */
+.cp-star--9  { top: 48%;  left: 88%;  width: 4.2cqw; height: 4.2cqw; animation-delay:  4.7s; }
+/* Lower area */
+.cp-star--10 { top: 70%;  left: 18%;  width: 3.5cqw; height: 3.5cqw; animation-delay:  2.1s; }
+.cp-star--11 { top: 78%;  left: 72%;  width: 4.8cqw; height: 4.8cqw; animation-delay:  8.4s; }
+.cp-star--12 { top: 65%;  left: 56%;  width: 3cqw;   height: 3cqw;   animation-delay:  5.9s; }
+
+/*
+ * cp-star-glow: 10 s cycle.
+ * 0 → 6 %:  appear + pop  (~0–0.6 s)
+ * 12.5 %:   peak scale/glow (~1.25 s)
+ * 25 %:     fade out  (~2.5 s)
+ * 25–100 %: invisible silence
+ */
+@keyframes cp-star-glow {
+  0%   { opacity: 0; transform: scale(0)    rotate(0deg);  filter: none; }
+  6%   {
+    opacity: 1;
+    transform: scale(1)    rotate(12deg);
+    filter: drop-shadow(0 0 6px  rgb(255 215 40 / 1))
+            drop-shadow(0 0 14px rgb(245 190 20 / .85))
+            drop-shadow(0 0 26px rgb(235 175 10 / .5));
+  }
+  12.5% {
+    opacity: 1;
+    transform: scale(1.25) rotate(20deg);
+    filter: drop-shadow(0 0 10px rgb(255 225 50 / 1))
+            drop-shadow(0 0 22px rgb(248 200 30 / .9))
+            drop-shadow(0 0 38px rgb(240 180 15 / .55));
+  }
+  20%  {
+    opacity: 1;
+    transform: scale(1)    rotate(28deg);
+    filter: drop-shadow(0 0 6px  rgb(255 215 40 / 1))
+            drop-shadow(0 0 14px rgb(245 190 20 / .85))
+            drop-shadow(0 0 26px rgb(235 175 10 / .5));
+  }
+  25%  { opacity: 0; transform: scale(0)    rotate(38deg); filter: none; }
+  100% { opacity: 0; transform: scale(0)    rotate(38deg); filter: none; }
+}
+
+/* Reduced-motion: no sparkles */
+@media (prefers-reduced-motion: reduce) {
+  .cp-star { display: none !important; }
+}

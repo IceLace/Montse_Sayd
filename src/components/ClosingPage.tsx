@@ -29,17 +29,19 @@ import { assetUrl } from '../assetUrl'
 // ─── Asset paths ──────────────────────────────────────────────────────────────
 const PAPER   = assetUrl('assets/shared/page-front.png')
 const DANCE   = assetUrl('assets/closing/montse-sayd-dance-transparent.webp')
-const POSTER  = assetUrl('assets/closing/montse-sayd-dance-poster.webp')
 const PHOTOS  = [
   assetUrl('assets/closing/01-architecture-hybrid.webp'),
   assetUrl('assets/closing/02-playful-lift-hybrid.webp'),
   assetUrl('assets/closing/03-intimate-hybrid.webp'),
   assetUrl('assets/closing/04-dip-hybrid.webp'),
 ]
-const SEAL    = assetUrl('assets/closing/ms-wax-seal.png')
+const SEAL         = assetUrl('assets/closing/ms-wax-seal.png')
+const MAGIC_GIF    = assetUrl('assets/closing/montse-sayd-magic.gif')
+const SPARKLES_WP  = assetUrl('assets/closing/couple-sparkles-loop-subtle.webp')
 
 // WebP dance duration (seconds) + small buffer
 const DANCE_DURATION_MS = 11100
+// GIF couple magic duration ≈ 9 600 ms — no loop, no ended event; timing embedded inline below
 
 interface ClosingPageProps { active: boolean }
 
@@ -109,6 +111,26 @@ export default function ClosingPage({ active }: ClosingPageProps) {
         draggable={false}
       />
 
+      {/* ── Ambient sparkle stars — activate when the final GIF starts ── */}
+      {/* Top-left cluster */}
+      <span aria-hidden="true" className="cp-star cp-star--1"  />
+      <span aria-hidden="true" className="cp-star cp-star--2"  />
+      <span aria-hidden="true" className="cp-star cp-star--3"  />
+      {/* Top-right cluster */}
+      <span aria-hidden="true" className="cp-star cp-star--4"  />
+      <span aria-hidden="true" className="cp-star cp-star--5"  />
+      {/* Mid-left */}
+      <span aria-hidden="true" className="cp-star cp-star--6"  />
+      {/* Centre */}
+      <span aria-hidden="true" className="cp-star cp-star--7"  />
+      <span aria-hidden="true" className="cp-star cp-star--8"  />
+      {/* Mid-right */}
+      <span aria-hidden="true" className="cp-star cp-star--9"  />
+      {/* Lower area */}
+      <span aria-hidden="true" className="cp-star cp-star--10" />
+      <span aria-hidden="true" className="cp-star cp-star--11" />
+      <span aria-hidden="true" className="cp-star cp-star--12" />
+
       {/* ── Prelude ── */}
       <div className="cp-prelude">
         <p className="cp-line cp-prelude-line0">Hay historias que se cuentan con palabras…</p>
@@ -117,6 +139,9 @@ export default function ClosingPage({ active }: ClosingPageProps) {
 
       {/* ── Dance mount point — <img> injected by JS ── */}
       <div className="cp-dance-mount" aria-hidden="true" />
+
+      {/* ── Couple finale mount — GIF + sparkle overlay injected by JS ── */}
+      <div className="cp-couple-mount" aria-hidden="true" />
 
       {/* ── Transitional text (between dance and photos) ── */}
       <div className="cp-transition-block" aria-hidden="true">
@@ -163,7 +188,7 @@ export default function ClosingPage({ active }: ClosingPageProps) {
         </div>
       </div>
 
-      {/* Accessible hidden text */}
+      {/* ── Accessible hidden text */}
       <p className="cp-sr-only">
         Hay historias que se cuentan con palabras… y otras que cobran vida.
         Cada historia se construye con pequeños momentos.
@@ -178,39 +203,23 @@ export default function ClosingPage({ active }: ClosingPageProps) {
 
 // ─── Reduced-motion: static final composition ─────────────────────────────────
 function showStatic(root: HTMLElement) {
-  // Poster image instead of animated WebP
-  const mount = root.querySelector<HTMLElement>('.cp-dance-mount')
-  if (mount) {
-    const poster = document.createElement('img')
-    poster.src        = POSTER
-    poster.alt        = ''
-    poster.className  = 'closing-dance'
-    poster.setAttribute('aria-hidden', 'true')
-    mount.appendChild(poster)
-    mount.style.opacity = '1'
-  }
+  // Show the couple GIF in its final-frame state — no animation, no overlay loop.
+  // The closing block is hidden; only the couple image and paper remain visible.
+  const coupleMount = root.querySelector<HTMLElement>('.cp-couple-mount')
+  if (coupleMount) {
+    const wrapper = document.createElement('div')
+    wrapper.className = 'cp-couple-inner'
 
-  const show = (el: HTMLElement | null) => { if (el) el.style.opacity = '1' }
-  show(root.querySelector('.cp-closing-block'))
-  show(root.querySelector('.cp-message'))
-  show(root.querySelector('.cp-sign-block'))
-  show(root.querySelector('.cp-seal-wrap'))
-  // Transition block is hidden in reduced-motion (text would be orphaned without sequence)
+    const gifImg = document.createElement('img')
+    gifImg.src       = MAGIC_GIF
+    gifImg.alt       = ''
+    gifImg.className = 'cp-couple-gif'
+    gifImg.setAttribute('aria-hidden', 'true')
+    gifImg.draggable = false
 
-  root.querySelectorAll<HTMLElement>('.cp-line').forEach(el => {
-    el.style.clipPath = 'none'
-    el.style.opacity  = '1'
-  })
-  root.querySelectorAll<HTMLElement>('.cp-signature, .cp-date').forEach(el => {
-    el.style.opacity = '1'
-  })
-
-  const photos = root.querySelectorAll<HTMLElement>('.cp-memory-photo')
-  const last = photos[photos.length - 1]
-  if (last) {
-    show(root.querySelector('.cp-memory-stage'))
-    last.style.opacity   = '1'
-    last.style.transform = 'scale(1)'
+    wrapper.appendChild(gifImg)
+    coupleMount.appendChild(wrapper)
+    coupleMount.style.opacity = '1'
   }
 }
 
@@ -218,11 +227,15 @@ function showStatic(root: HTMLElement) {
 interface Seq { play(): void; pause(): void; resume(): void; destroy(): void }
 
 function buildSeq(root: HTMLElement, preloadPhotos: () => void): Seq {
+  // Each scheduled step is stored so we can cancel and re-schedule on resume.
+  const steps: Array<{ ms: number; fn: () => void }> = []
   const timers: number[] = []
-  let destroyed = false
-  let playing   = false
+  let destroyed  = false
+  let playing    = false
+  let startedAt  = 0   // wall-clock ms when play() was called
 
   function at(ms: number, fn: () => void) {
+    steps.push({ ms, fn })
     timers.push(window.setTimeout(() => { if (!destroyed) fn() }, ms))
   }
 
@@ -273,7 +286,8 @@ function buildSeq(root: HTMLElement, preloadPhotos: () => void): Seq {
 
   // ── play ────────────────────────────────────────────────────────────────────
   function play() {
-    playing = true
+    playing   = true
+    startedAt = Date.now()
     resetLines()
     resetPhotos()
 
@@ -405,11 +419,61 @@ function buildSeq(root: HTMLElement, preloadPhotos: () => void): Seq {
     })
 
     // ── Phase 7: Wax seal ─────────────────────────────────────────────────────
+    // Phase 8 is chained directly from the seal callback — short relative timers
+    // avoid the >30 s setTimeout throttling on background tabs / dimmed screens.
     at(SIGN_START + 2000, () => {
       if (sealWrap) sealWrap.style.opacity = '1'
       if (sealImg)  sealImg.style.animation = 'cp-seal-stamp 0.6s cubic-bezier(0.25,0.46,0.45,0.94) forwards'
+
+      // ── Phase 8: Couple finale — chained off the seal ──────────────────────
+      const chain = (delay: number, fn: () => void) => {
+        timers.push(window.setTimeout(() => { if (!destroyed) fn() }, delay))
+      }
+
+      // 800 ms after seal stamps: mount and reveal GIF bottom-right + activate sparkles
+      chain(800, () => {
+        // Activate ambient sparkle stars across the page
+        root.classList.add('cp-stars-active')
+
+        const coupleMount = qs<HTMLElement>('.cp-couple-mount')
+        if (!coupleMount) return
+
+        const wrapper = document.createElement('div')
+        wrapper.className = 'cp-couple-inner'
+
+        const gifImg = document.createElement('img')
+        gifImg.src        = MAGIC_GIF
+        gifImg.alt        = ''
+        gifImg.className  = 'cp-couple-gif'
+        gifImg.setAttribute('aria-hidden', 'true')
+        gifImg.draggable  = false
+
+        const overlay = document.createElement('img')
+        overlay.src       = SPARKLES_WP
+        overlay.alt       = ''
+        overlay.className = 'cp-couple-overlay'
+        overlay.setAttribute('aria-hidden', 'true')
+        overlay.draggable = false
+
+        wrapper.appendChild(gifImg)
+        wrapper.appendChild(overlay)
+        coupleMount.appendChild(wrapper)
+
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          coupleMount.style.transition = 'opacity 500ms ease'
+          coupleMount.style.opacity    = '1'
+        }))
+
+        // 800 + 500 fade-in + 9 600 GIF = 10 900 ms: show sparkle overlay
+        chain(10900, () => {
+          const ov = root.querySelector<HTMLElement>('.cp-couple-overlay')
+          if (!ov) return
+          ov.style.transition = 'opacity 600ms ease'
+          ov.style.opacity    = '1'
+        })
+      })
     })
-    // Hold forever — no loop
+    // Hold forever — no loop on GIF, sparkle overlay loops indefinitely
   }
 
   // ── pause / resume / destroy ────────────────────────────────────────────────
@@ -421,9 +485,16 @@ function buildSeq(root: HTMLElement, preloadPhotos: () => void): Seq {
   }
 
   function resume() {
-    // After a pause the setTimeout timeline is lost; video is an img so no
-    // explicit resume needed. Just mark as playing so destroy works.
+    if (playing || destroyed) return
     playing = true
+    // Re-schedule any steps whose target time is still in the future.
+    const elapsed = Date.now() - startedAt
+    steps.forEach(({ ms, fn }) => {
+      const remaining = ms - elapsed
+      if (remaining > 0) {
+        timers.push(window.setTimeout(() => { if (!destroyed) fn() }, remaining))
+      }
+    })
   }
 
   function destroy() {
@@ -433,6 +504,11 @@ function buildSeq(root: HTMLElement, preloadPhotos: () => void): Seq {
     // Remove dance img if still mounted
     const mount = root.querySelector<HTMLElement>('.cp-dance-mount')
     if (mount) mount.innerHTML = ''
+    // Remove couple finale if still mounted
+    const coupleMount = root.querySelector<HTMLElement>('.cp-couple-mount')
+    if (coupleMount) coupleMount.innerHTML = ''
+    // Remove sparkle stars activation
+    root.classList.remove('cp-stars-active')
   }
 
   return { play, pause, resume, destroy }
