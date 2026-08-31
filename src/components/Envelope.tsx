@@ -1,6 +1,13 @@
-import { useRef, useCallback, useEffect } from 'react'
+import { useRef, useCallback, useEffect, useMemo } from 'react'
 import { gsap } from 'gsap'
 import { assetUrl } from '../assetUrl'
+
+function getGuestFromUrl(): string | null {
+  if (typeof window === 'undefined') return null
+  const params = new URLSearchParams(window.location.search)
+  const guest = params.get('guest')
+  return guest && guest.trim().length > 0 ? guest.trim() : null
+}
 
 interface EnvelopeProps {
   paperRef: React.RefObject<HTMLDivElement | null>
@@ -17,6 +24,7 @@ export default function Envelope({ paperRef, onOpenStart, onOpenComplete, onPlay
   const rightRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const hasAnimated = useRef(false)
+  const guestName = useMemo(() => getGuestFromUrl(), [])
 
   // Let GSAP own the paper transform from mount so its tween never conflicts
   useEffect(() => {
@@ -87,6 +95,13 @@ export default function Envelope({ paperRef, onOpenStart, onOpenComplete, onPlay
       aria-label="Abrir invitación"
     >
       <div className="envelope-container" ref={containerRef}>
+        {guestName && (
+          <header className="envelope-guest-header">
+            <p className="envelope-guest-label">ESPECIALMENTE PARA</p>
+            <h1 className="envelope-guest-name">{guestName}</h1>
+          </header>
+        )}
+
         <div className="envelope-piece envelope-piece--left" ref={leftRef}>
           <img
             src={assetUrl('assets/envelope/envelope-left.png')}
