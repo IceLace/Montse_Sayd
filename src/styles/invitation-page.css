@@ -1665,6 +1665,7 @@ body {
 /* Hide form when confirmed */
 .rsvp-content.is-confirmed > .rsvp-header,
 .rsvp-content.is-confirmed > .rsvp-divider,
+.rsvp-content.is-confirmed > .rsvp-adults-notice,
 .rsvp-content.is-confirmed > .rsvp-form,
 .rsvp-content.is-confirmed > .rsvp-footer { display: none; }
 
