@@ -5,9 +5,10 @@ interface RsvpPageProps {
   active: boolean
 }
 
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxH-0fRufpSqJdxqPkyegVz-OVSWxud9Jr3ECHiXJZ0uOTjgfjy-LD1FRHoI6s9bTGB/exec'
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbw1AITZYONOI2JoLu9EszfO6M2tF6BwKjQcVIExMSr9PQlMvXiAKnfvt7wwL65dnnep/exec'
 
 async function submitRsvp(payload: {
+  guest: string
   fullName: string
   attendance: string
   companions: number
@@ -89,8 +90,9 @@ export default function RsvpPage({ active }: RsvpPageProps) {
     setErrorMsg('')
     setSubmitting(true)
 
+    const guest = new URLSearchParams(window.location.search).get('guest')?.trim() ?? ''
     const totalPeople = attendance === 'yes' ? companions + 1 : 0
-    const payload = { fullName: fullName.trim(), attendance, companions, totalPeople }
+    const payload = { guest, fullName: fullName.trim(), attendance, companions, totalPeople }
 
     try {
       const result = await submitRsvp(payload)
