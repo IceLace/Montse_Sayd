@@ -42,7 +42,7 @@ export default function RsvpPage({ active }: RsvpPageProps) {
   const [errorMsg, setErrorMsg] = useState('')
   const [successData, setSuccessData] = useState<SuccessData | null>(null)
 
-  const MAX_COMPANIONS = 5
+  const MAX_COMPANIONS = 20
 
   // ── Reveal animation: 450 ms after the page becomes active ───────────────
   useEffect(() => {
