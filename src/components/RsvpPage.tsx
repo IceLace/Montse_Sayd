@@ -24,6 +24,9 @@ async function submitRsvp(payload: {
   return { ok: true }
 }
 
+// The RSVP deadline (15 Nov 2026) has passed: confirmations/cancellations are blocked.
+const RSVP_CLOSED = true
+
 type SuccessData = {
   attendance: 'yes' | 'no'
   totalPeople: number
@@ -56,14 +59,15 @@ export default function RsvpPage({ active }: RsvpPageProps) {
     return () => window.clearTimeout(timer)
   }, [active])
 
-  // ── Success screen: add is-visible once it becomes unhidden ─────────────
+  // ── Success / closed screen: add is-visible once it becomes unhidden ────
   const successRef = useRef<HTMLElement>(null)
+  const showingResult = RSVP_CLOSED || !!successData
   useEffect(() => {
-    if (!successData) return
+    if (!showingResult || (RSVP_CLOSED && !active)) return
     const el = successRef.current
     if (!el) return
     requestAnimationFrame(() => el.classList.add('is-visible'))
-  }, [successData])
+  }, [showingResult, active])
 
   // ── Handlers ─────────────────────────────────────────────────────────────
   function stopGesture(e: React.SyntheticEvent) {
@@ -83,7 +87,7 @@ export default function RsvpPage({ active }: RsvpPageProps) {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     e.stopPropagation()
-    if (submitted || submitting) return
+    if (RSVP_CLOSED || submitted || submitting) return
     if (!fullName.trim()) { setErrorMsg('Por favor escribe tu nombre.'); return }
     if (!attendance) { setErrorMsg('Por favor selecciona tu asistencia.'); return }
 
@@ -115,7 +119,7 @@ export default function RsvpPage({ active }: RsvpPageProps) {
     >
       <img className="rsvp-paper" src={assetUrl('assets/shared/page-front.png')} alt="" aria-hidden="true" draggable={false} />
 
-      <div className={`rsvp-content${successData ? ' is-confirmed' : ''}`}>
+      <div className={`rsvp-content${showingResult ? ' is-confirmed' : ''}`}>
         <header className="rsvp-header reveal reveal-1">
           <img src={assetUrl('assets/rsvp/rsvp-sprig.png')} alt="" className="rsvp-sprig" aria-hidden="true" draggable={false} />
           <h2 id="rsvp-title">RSVP</h2>
@@ -229,8 +233,44 @@ export default function RsvpPage({ active }: RsvpPageProps) {
           <em>Con cariño, Montse &amp; Sayd</em>
         </footer>
 
+        {/* ── Closed screen (RSVP deadline has passed) ──────────────────── */}
+        {RSVP_CLOSED && (
+          <section
+            ref={successRef}
+            className="rsvp-success rsvp-closed"
+            id="rsvp-closed"
+            aria-live="polite"
+          >
+            <img
+              src={assetUrl('assets/rsvp/confirmation-envelope.png')}
+              alt=""
+              aria-hidden="true"
+              draggable={false}
+            />
+
+            <h3>CONFIRMACIONES CERRADAS</h3>
+            <p className="success-copy">
+              La confirmación de asistencia ha sido bloqueada.
+            </p>
+
+            <div className="success-divider" aria-hidden="true"><span></span></div>
+
+            <p className="success-no-msg">
+              La fecha límite para confirmar, el 15 de noviembre de 2026, ya concluyó,<br />
+              por lo que ya no es posible confirmar ni cancelar tu asistencia.<br />
+              Gracias por acompañarnos en este camino.
+            </p>
+
+            <div className="success-sprig-divider" aria-hidden="true">
+              <img src={assetUrl('assets/rsvp/rsvp-sprig.png')} alt="" draggable={false} />
+            </div>
+
+            <em>Con cariño,<br /><b>Montse &amp; Sayd</b></em>
+          </section>
+        )}
+
         {/* ── Success screen ────────────────────────────────────────────── */}
-        {successData && (
+        {!RSVP_CLOSED && successData && (
           <section
             ref={successRef}
             className="rsvp-success"
